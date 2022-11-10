@@ -12,7 +12,9 @@ public:
             if(nums[i]<*mid){
                 mid--;
             }
+           
             if(nums[i-k]<=*mid) mid++;
+          
             s.erase(s.lower_bound(nums[i-k]));
         }
         return ans;
