@@ -20,7 +20,7 @@ public:
             
             ans+=(node1==node2?(val[node1]/2):val[node1]);
         }
-         if(adj[node1].size()==1 && node1!=0) maxi=max(maxi,ans);
+       
         vis[node1]=1,vis[node2]=1;
         
         for(int n1:adj[node1]){
@@ -42,6 +42,7 @@ public:
             
             
         }
+          if(adj[node1].size()==1 && node1!=0) maxi=max(maxi,ans);
          vis[node1]=0,vis[node2]=0;
        
       
