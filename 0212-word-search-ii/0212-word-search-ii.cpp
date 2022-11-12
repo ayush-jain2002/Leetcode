@@ -1,82 +1,69 @@
-class Node{
-    Node* links[26];
-    bool end=false;
-  public:
-    void insert(char ch){
-        links[ch-'a'] = new Node();
-    }
-    
-    bool isPresent(char ch){
-        return links[ch-'a']!=NULL;
-    }
-    Node* getNext(char ch){
-        return links[ch-'a'];
-    }
-    
-    void setEnd(){
-        end=true;
-    }
-    
-    bool isEnd(){
-        return end;
-    }
-    
-};
-
 class Solution {
-  
-    int n,m;
-    
-    void solve(unordered_set<string>&res, string&curr, vector<vector<char>>&board, Node* node, int i, int j){
-        
-        
-        if(i<0 || i==n || j<0 || j==m || board[i][j]=='*' || !node->isPresent(board[i][j])) return;
-        
-        char ch = board[i][j];
-       
-        curr+=ch;
-        board[i][j]='*';
-        
-        node=node->getNext(ch);
-        if(node->isEnd()) res.insert(curr);
-        
-        solve(res,curr,board,node,i+1,j);
-        solve(res,curr,board,node,i-1,j);
-        solve(res,curr,board,node,i,j+1);
-        solve(res,curr,board,node,i,j-1);
-        
-        curr.pop_back();
-        board[i][j]=ch;
-    }
 public:
+    
+    struct node{
+        node* links[26];
+        bool flag=false;
+        bool containskey(char c){
+            return links[c-'a']!=NULL;
+        }
+        void put(char c,node* n){
+            links[c-'a']=n;
+        }
+        node* get(char c){
+            return links[c-'a'];
+        }
+        
+    };
+    node* root=new node();
+       vector<string>ans;
+    int x,y;
+    void insert(string word){
+        node* n=root;
+        for(int i=0;i<word.size();i++){
+            if(!n->containskey(word[i])){
+                n->put(word[i],new node());
+            }
+            n=n->get(word[i]);
+        }
+        n->flag=true;
+        
+    }
+    unordered_set<string>s;
+    void func(int i,int j,vector<vector<char>>&b,node* n,string &str){
+        
+        if(i<0 || j<0 || i==x || j==y || b[i][j]=='*' || !n->containskey(b[i][j])) return;
+      
+      
+        str.push_back(b[i][j]);
+        char c=b[i][j];
+        b[i][j]='*';
+          n=n->get(c);
+          if(n->flag==true) s.insert(str);
+        func(i+1,j,b,n,str);
+        func(i,j-1,b,n,str);
+        func(i,j+1,b,n,str);
+        func(i-1,j,b,n,str);
+        b[i][j]=c;
+        str.pop_back();
+    }
     vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
-        
-        n=board.size(),m=board[0].size();
-        unordered_set<string>res;
-        Node* root = new Node();
-        for(auto word : words){
-            Node* node = root;
-            for(int i=0;i<word.size();i++){
-                char ch = word[i];
-                if(!node->isPresent(ch)) node->insert(ch);
-                node=node->getNext(ch);
-            }
-            node->setEnd();
+        node* n=root;
+        x=board.size(),y=board[0].size();
+        for(string &i:words){
+            insert(i);
         }
-        
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                char ch = board[i][j];
-                if(!root->isPresent(ch)) continue;
-                    
-                string curr;
-                solve(res,curr,board,root,i,j);
+     
+        for(int i=0;i<board.size();i++){
+            for(int j=0;j<board[0].size();j++){
+                if(n->containskey(board[i][j])){
+                    string curr;
+                   func(i,j,board,n,curr);
+                }
+                n=root;
             }
         }
-        
-        vector<string>v;
-        for(auto it : res) v.push_back(it);
-        return v;
-        
+       for(auto i:s) ans.push_back(i);
+        return ans;
     }
 };
