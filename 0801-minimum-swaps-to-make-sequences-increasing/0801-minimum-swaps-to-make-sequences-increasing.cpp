@@ -7,16 +7,15 @@ public:
         if(i==n1.size()) return 0;
         int ans=INT_MAX;
         if(dp[i][s]!=-1) return dp[i][s];
-        int prev1=n1[i-1];
-        int prev2=n2[i-1];
-        if(s) swap(prev1,prev2);
-        if(prev1<n1[i] && prev2<n2[i]){
+        if(s) swap(n1[i-1],n2[i-1]);
+        if(n1[i-1]<n1[i] && n2[i-1]<n2[i]){
            
             ans=min(ans,f(i+1,n1,n2,0));
         }
-       if(n1[i]>prev2 && n2[i]>prev1){
+       if(n1[i]>n2[i-1] && n2[i]>n1[i-1]){
            ans=min(ans,1+f(i+1,n1,n2,1));
        }
+          if(s) swap(n1[i-1],n2[i-1]);
         
         return dp[i][s]=ans;
     }
