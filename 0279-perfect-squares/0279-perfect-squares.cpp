@@ -1,20 +1,16 @@
 class Solution {
 public:
-    int dp[10001];
-    int func(int n){
-        if(n==0) return 0;
-        if(dp[n]!=-1) return dp[n];
-        int count=n;
-        for(int i=1;i*i<=n;i++){
-            
-            count=min(count,1+func(n-(i*i)));
-        }
-       
-        return dp[n]=count;
-    }
+   
+    
     int numSquares(int n) {
-        memset(dp,-1,sizeof(dp));
-        return func(n);
+        vector<int>dp(n+1,1e5);
+        iota(begin(dp),end(dp),0);
+        for(int i=0;i<=n;i++){
+            for(int j=1;j*j<=i;j++){
+                dp[i]=min(dp[i],1+dp[i-j*j]);
+            }
+        }
+        return dp[n];
         
     }
 };
