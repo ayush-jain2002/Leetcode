@@ -28,15 +28,13 @@ public:
             s.push(i);
             
         }
-        // for(int i=0;i<n;i++){
-        //     cout<<sl[i]<<" "<<sr[i]<<endl;
-        // }
+       
         long long sum=0;
         for(int i=0;i<n;i++){
-            long long total=calc(sr[i]-sl[i]-1);
-            long long left=calc(i-sl[i]-1);
-            long long right=calc(sr[i]-i-1);
-            sum+=(arr[i])*1LL*(total-left-right);
+           
+            int  left=(i-sl[i]);
+            int right=(sr[i]-i);
+            sum+=(arr[i])*1LL*(left*right);
         }
         return sum%(1000000007);
     }
